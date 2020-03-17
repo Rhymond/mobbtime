@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import 'react-bulma-components/dist/react-bulma-components.min.css';
-import './bulmaswatch.min.css'
 import { Button, Columns, Container, Form, Heading, Section } from "react-bulma-components";
 import tick from "./tick.wav";
 import ding from "./ding.mp3";
