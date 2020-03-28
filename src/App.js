@@ -123,6 +123,25 @@ class App extends Component {
     })
   }
 
+  shufflePressed() {
+    if (this.state.status !== "begin") {
+      return
+    }
+    let people = this.state.people;
+    people = this.shuffle(people);
+    this.setState({
+      people: people
+    })
+  }
+
+  shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
   addPerson() {
     if (this.state.currentPerson === "") {
       return
@@ -352,6 +371,13 @@ class App extends Component {
               <Button color="danger" onClick={this.resetPressed.bind(this)}>
                 Reset
               </Button>
+
+              { status === "begin" && (
+                  <Button color="info" onClick={this.shufflePressed.bind(this)}>
+                    Shuffle
+                  </Button>
+              )}
+
             </Button.Group>
           </Container>
         </Section>
