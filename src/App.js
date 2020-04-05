@@ -12,24 +12,6 @@ import {
 import tick from "./tick.wav";
 import ding from "./ding.mp3";
 
-const Person = ({ children, selected, remove }) => (
-  <div
-    style={{
-      width: "100%",
-      backgroundColor: selected ? "#5c9ff1" : "#f1f1f1",
-      color: selected ? "white" : "black",
-      textAlign: "center",
-      padding: "8px 0",
-      marginBottom: 8,
-      borderRadius: "10px",
-      cursor: "pointer",
-    }}
-    onClick={remove}
-  >
-    {children}
-  </div>
-);
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -44,6 +26,8 @@ class App extends Component {
       timer: 60,
       status: "begin",
       rotations: 0,
+      dragPerson: -1,
+      draggedOverPerson: -1,
     };
 
     this.audioTick = new Audio(tick);
@@ -273,10 +257,12 @@ class App extends Component {
       status,
       people,
       selectedPerson,
+      dragPerson,
       cycleTime,
       rotateTime,
       breakRotations,
       breakTime,
+      draggedOverPerson,
     } = this.state;
 
     const minutes = Math.floor(timer / 60);
@@ -289,14 +275,62 @@ class App extends Component {
             <Columns>
               <Columns.Column>
                 {people.map((person, i) => (
-                  <Person
-                    selected={i === selectedPerson}
-                    remove={() => {
+                  <div
+                    key={i}
+                    style={{
+                      width: "100%",
+                      backgroundColor: i === selectedPerson ? "#5c9ff1" : "#f1f1f1",
+                      color: i === selectedPerson ? "white" : "black",
+                      marginLeft: i === draggedOverPerson ? 12 : 0,
+                      transition: "all 100ms linear",
+                      textAlign: "center",
+                      padding: "8px 0",
+                      marginBottom: 8,
+                      borderRadius: "10px",
+                      cursor: "pointer",
+                    }}
+                    draggable={true}
+                    onClick={() => {
+                      if (status !== "begin") {
+                        return
+                      }
                       this.removePerson(i);
                     }}
-                  >
+                    onDragStart={e => {
+                      if (status !== "begin") {
+                        return
+                      }
+                      this.setState({
+                        dragPerson: i
+                      });
+                    }}
+                    onDragEnd={e => {
+                      if (status !== "begin") {
+                        return
+                      }
+                      if (dragPerson === -1) {
+                        return
+                      }
+                      people.splice(draggedOverPerson, 0, people.splice(dragPerson, 1)[0]);
+                      this.setState({
+                        dragPerson: -1,
+                        draggedOverPerson: -1,
+                        people: people
+                      });
+                    }}
+                    onDragOver={e => {
+                      if (status !== "begin") {
+                        return
+                      }
+                      if (draggedOverPerson !== i) {
+                        this.setState({
+                          draggedOverPerson: i,
+                        })
+                      }
+                    }}
+                    >
                     {person}
-                  </Person>
+                  </div>
                 ))}
 
                 <Form.Field>
