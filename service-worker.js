@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "https://rhymond.github.io/mobbtime/precache-manifest.d91a56683bbf16891cfb97a9afc58f02.js"
+  "https://rhymond.github.io/mobbtime/precache-manifest.49941a8d0433ca85627a1b22948408c1.js"
 );
 
 self.addEventListener('message', (event) => {
